@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import pickle
+import os
 
 # Load the trained model
 with open('crop_recommendation_model.pkl', 'rb') as f:
@@ -37,6 +38,9 @@ def predict():
     except Exception as e:
         return jsonify({'error': str(e)})
 
-# Run the app (for local testing)
+# Run the app (for Render deployment)
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Get the port from the environment or default to 5000
+    port = int(os.environ.get("PORT", 5000))
+    # Bind to 0.0.0.0 for Render to expose the service
+    app.run(host='0.0.0.0', port=port, debug=True)
